@@ -1,0 +1,30 @@
+# Activity 3: Heap sort
+from activity_2_max_heap import MaxHeap
+
+
+def heap_sort(numbers):
+    heap = MaxHeap()
+    for num in numbers:
+        heap.insert(num)
+
+    sorted_list = [None] * len(numbers)
+    for i in range(len(numbers) - 1, -1, -1):
+        sorted_list[i] = heap.extract()
+    return sorted_list
+
+
+if _name_ == "_main_":
+    cases = [
+        [4, 10, 3, 5, 1],
+        [1, 2, 3, 4, 5],
+        [9, 7, 5, 3, 1],
+        [4, 2, 4, 1, 2, 5],
+        [],
+        [7],
+        [14, -2, 8, 0, 19, -5, 3, 11]
+    ]
+    for case in cases:
+        result = heap_sort(case)
+        print(f"{case} -> {result}")
+        assert result == sorted(case)
+    print("Activity 3 passed!")

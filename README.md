@@ -1,0 +1,94 @@
+# Activity 1: Min-heap
+class MinHeap:
+    def __init__(self):
+        self.data = []
+
+    def size(self):
+        return len(self.data)
+
+    def peek(self):
+        if not self.data:
+            return None
+        return self.data[0]
+
+    def insert(self, value):
+        self.data.append(value)
+        self._move_up(len(self.data) - 1)
+
+    def extract(self):
+        if not self.data:
+            return None
+        smallest = self.data[0]
+        last_item = self.data.pop()
+        if self.data:
+            self.data[0] = last_item
+            self._move_down(0)
+        return smallest
+
+    def _move_up(self, index):
+        while index > 0:
+            parent = (index - 1) // 2
+            if self.data[index] < self.data[parent]:
+                self.data[index], self.data[parent] = self.data[parent], self.data[index]
+                index = parent
+            else:
+                break
+
+    def _move_down(self, index):
+        n = len(self.data)
+        while True:
+            left = 2 * index + 1
+            right = 2 * index + 2
+            smallest = index
+
+            if left < n and self.data[left] < self.data[smallest]:
+                smallest = left
+            if right < n and self.data[right] < self.data[smallest]:
+                smallest = right
+
+            if smallest != index:
+                self.data[index], self.data[smallest] = self.data[smallest], self.data[index]
+                index = smallest
+            else:
+                break
+
+
+if __name__ == "__main__":
+    h = MinHeap()
+    for x in [5, 9, 11, 14, 19, 17, 18, 13]:
+        h.insert(x)
+
+    extracted = []
+    while h.size() > 0:
+        extracted.append(h.extract())
+
+    print("Extracted:", extracted)
+    assert extracted == [5, 9, 11, 13, 14, 17, 18, 19]
+
+    empty = MinHeap()
+    assert empty.size() == 0
+    assert empty.peek() is None
+    assert empty.extract() is None
+
+    single = MinHeap()
+    single.insert(10)
+    assert single.size() == 1
+    assert single.peek() == 10
+    assert single.extract() == 10
+
+    dups = MinHeap()
+    for val in [4, 4, 2, 4, 1]:
+        dups.insert(val)
+    dup_out = []
+    while dups.size() > 0:
+        dup_out.append(dups.extract())
+    assert dup_out == [1, 2, 4, 4, 4]
+
+    rand_h = MinHeap()
+    for val in [25, 3, 18, 7, 12, 1, 9, 30, 6]:
+        rand_h.insert(val)
+    rand_out = []
+    while rand_h.size() > 0:
+        rand_out.append(rand_h.extract())
+    assert rand_out == [1, 3, 6, 7, 9, 12, 18, 25, 30]
+    print("Activity 1 passed!")

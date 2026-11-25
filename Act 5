@@ -1,0 +1,41 @@
+# Activity 5: Merge k sorted arrays
+from activity_1_min_heap import MinHeap
+
+
+def merge_three_sorted_arrays(arr1, arr2, arr3):
+    arrays = [arr1, arr2, arr3]
+    pointers = [0, 0, 0]
+    heap = MinHeap()
+
+    for idx, arr in enumerate(arrays):
+        if arr:
+            heap.insert((arr[0], idx))
+            pointers[idx] = 1
+
+    merged = []
+    while heap.size() > 0:
+        value, src_idx = heap.extract()
+        merged.append(value)
+
+        next_pos = pointers[src_idx]
+        if next_pos < len(arrays[src_idx]):
+            heap.insert((arrays[src_idx][next_pos], src_idx))
+            pointers[src_idx] += 1
+
+    return merged
+
+
+if _name_ == "_main_":
+    cases = [
+        ([1, 4, 9, 15], [2, 3, 10], [0, 5, 8, 12, 20]),
+        ([], [1, 5], [2, 3, 6, 9]),
+        ([], [], []),
+        ([5], [5], [5]),
+        ([-10, -3, 4, 12, 25], [-8, 0, 7], [-15, 2, 19, 30, 42]),
+    ]
+    for a, b, c in cases:
+        merged = merge_three_sorted_arrays(a, b, c)
+        expected = sorted(a + b + c)
+        print("Merged:", merged)
+        assert merged == expected
+    print("Activity 5 passed!")

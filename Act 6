@@ -1,0 +1,30 @@
+# Activity 6: Priority scheduler (stretch)
+from activity_1_min_heap import MinHeap
+
+
+def run_priority_scheduler(jobs):
+    heap = MinHeap()
+    for order_id, (priority, job_name) in enumerate(jobs):
+        heap.insert((-priority, order_id, job_name))
+
+    release_order = []
+    while heap.size() > 0:
+        neg_prio, _, job_name = heap.extract()
+        release_order.append((-neg_prio, job_name))
+    return release_order
+
+
+if _name_ == "_main_":
+    jobs = [
+        (2, "Backup files"),
+        (5, "Handle emergency alert"),
+        (1, "Clean temp logs"),
+        (4, "Send payment receipt"),
+        (5, "Check server crash"),
+    ]
+    order = run_priority_scheduler(jobs)
+    print("Release order:")
+    for prio, name in order:
+        print(f"  [Priority {prio}] {name}")
+    assert run_priority_scheduler([]) == []
+    print("Activity 6 passed!")

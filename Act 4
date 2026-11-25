@@ -1,0 +1,34 @@
+# Activity 4: Kth largest
+from activity_1_min_heap import MinHeap
+
+
+def kth_largest(numbers, k):
+    if k <= 0 or k > len(numbers):
+        return None
+
+    heap = MinHeap()
+    for num in numbers:
+        if heap.size() < k:
+            heap.insert(num)
+        elif num > heap.peek():
+            heap.extract()
+            heap.insert(num)
+
+    return heap.peek()
+
+
+if _name_ == "_main_":
+    test_lists = [
+        ([12, 3, 5, 7, 19, 19, 2], 1),
+        ([12, 3, 5, 7, 19, 19, 2], 2),
+        ([12, 3, 5, 7, 19, 19, 2], 4),
+        ([50], 1),
+        ([8, 8, 8, 8], 3),
+        ([15, 2, 99, 41, 7, 23, 64, 10], 5),
+    ]
+    for nums, k in test_lists:
+        ans = kth_largest(nums, k)
+        expected = sorted(nums, reverse=True)[k - 1]
+        print(f"nums={nums}, k={k} -> got={ans}, expected={expected}")
+        assert ans == expected
+    print("Activity 4 passed!")
